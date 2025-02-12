@@ -59,6 +59,7 @@ warmup_steps = 2000
 save_steps = 2000
 ddp_find_unused_parameters = False
 gradient_checkpointing = True           # Esto a lo mejor se puede quitar
+optimizer = AdamW()
 
 """
 ==========================
@@ -107,7 +108,7 @@ training_args = TrainingArguments(
     warmup_steps = warmup_steps,
     
     # Precisión y optimización
-    bf16 = True
+    bf16 = True,
     
     # Checkpoints y logging
     save_strategy = "steps",
@@ -122,7 +123,7 @@ training_args = TrainingArguments(
     
     # Optimizaciones de memoria
     gradient_checkpointing = gradient_checkpointing,
-    optim = AdamW()
+    optim = optimizer
 )
 
 
