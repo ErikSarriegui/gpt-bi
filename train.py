@@ -1,4 +1,5 @@
 from transformers import GPT2TokenizerFast, GPT2Config, GPT2LMHeadModel, Trainer, TrainingArguments, DataCollatorForLanguageModeling
+from torch.optim import AdamW
 
 import huggingface_hub
 
@@ -38,8 +39,8 @@ transformer_layers = 12
 number_heads = 12
 
 ## -- Training
-batch_size = 12
-gradient_accumulation_steps = 40
+batch_size = 64
+gradient_accumulation_steps = 10
 total_tokens = 4_000_000_000
 
 max_steps = calculate_steps(
