@@ -107,7 +107,7 @@ training_args = TrainingArguments(
     warmup_steps = warmup_steps,
     
     # Precisión y optimización
-    fp16 = True, #bf16 = True
+    bf16 = True
     
     # Checkpoints y logging
     save_strategy = "steps",
