@@ -39,8 +39,8 @@ transformer_layers = 12
 number_heads = 12
 
 ## -- Training
-batch_size = 32
-gradient_accumulation_steps = 1
+batch_size = 12
+gradient_accumulation_steps = 40
 total_tokens = 4_000_000_000
 
 max_steps = calculate_steps(
@@ -58,16 +58,17 @@ lr_scheduler_type = "cosine"
 warmup_steps = 2000
 save_steps = 2000
 ddp_find_unused_parameters = False
-gradient_checkpointing = True           # Esto a lo mejor se puede quitar
+gradient_checkpointing = False
 optimizer = AdamW()
+num_workers = os.cpu_count()
 
 """
 ==========================
 DATASET
 ==========================
 """
-train_dataset = LatxaDataset(tokenizer, split = "train", block_size = block_size, batch_size = batch_size)
-eval_dataset = LatxaDataset(tokenizer, split = "validation", block_size = block_size, batch_size = batch_size)
+train_dataset = LatxaDataset(tokenizer, split = "train", block_size = block_size, batch_size = 128)
+eval_dataset = LatxaDataset(tokenizer, split = "validation", block_size = block_size, batch_size = 128)
 
 """
 ==========================
@@ -119,6 +120,7 @@ training_args = TrainingArguments(
     
     # Otros parámetros
     ddp_find_unused_parameters = ddp_find_unused_parameters,
+    dataloader_num_workers = num_workers,
     report_to = "none",
     
     # Optimizaciones de memoria
