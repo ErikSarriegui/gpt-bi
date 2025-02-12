@@ -122,7 +122,7 @@ training_args = TrainingArguments(
     
     # Optimizaciones de memoria
     gradient_checkpointing = gradient_checkpointing,
-    optim = AdamW
+    optim = AdamW()
 )
 
 
