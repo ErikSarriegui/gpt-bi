@@ -1,5 +1,4 @@
 from transformers import GPT2TokenizerFast, GPT2Config, GPT2LMHeadModel, Trainer, TrainingArguments, DataCollatorForLanguageModeling
-from torch.optim import AdamW
 
 import huggingface_hub
 
@@ -59,7 +58,6 @@ warmup_steps = 2000
 save_steps = 2000
 ddp_find_unused_parameters = False
 gradient_checkpointing = False
-optimizer = AdamW()
 num_workers = os.cpu_count()
 
 """
@@ -125,7 +123,7 @@ training_args = TrainingArguments(
     
     # Optimizaciones de memoria
     gradient_checkpointing = gradient_checkpointing,
-    optim = optimizer
+    optim = "adamw_torch"
 )
 
 
