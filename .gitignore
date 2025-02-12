@@ -1,5 +1,0 @@
-.env
-.gitignore
-tests.ipynb
-__pycache__/
-*.pyc
