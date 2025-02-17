@@ -28,7 +28,7 @@ def main():
     """        
     ## -- Model & Hyperparams
     block_size = 1024
-    batch_size = 48
+    batch_size = 64
     learning_rate = 6e-4
     weight_decay = 0.1
     max_grad_norm = 1.0
