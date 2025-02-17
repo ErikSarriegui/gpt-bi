@@ -62,14 +62,10 @@ def main():
     ==========================
     DATASET
     ==========================
-    """
-    def clean_text(example):
-        example["clean_text"] = example["text"]
-        return example
-    
+    """   
     def tokenize(example, tokenizer=tokenizer, block_size=block_size):
         tokenized = tokenizer(
-            example["clean_text"],
+            example["text"],
             padding="max_length",
             max_length=block_size,
             truncation=True
@@ -80,12 +76,9 @@ def main():
 
     train_dataset = loadLatxa(split = "train")
     test_dataset = loadLatxa(split = "test")
-
-    clean_train_dataset = train_dataset.map(clean_text, batched = True, num_proc = num_workers, remove_columns = ["text"])
-    clean_test_dataset = test_dataset.map(clean_text, batched = True, num_proc = num_workers, remove_columns = ["text"])
     
-    tokenized_train_dataset = clean_train_dataset.map(tokenize, batched = True, num_proc = num_workers, remove_columns = ["clean_text"])
-    tokenized_test_dataset = clean_test_dataset.map(tokenize, batched = True, num_proc = num_workers, remove_columns = ["clean_text"])
+    tokenized_train_dataset = train_dataset.map(tokenize, batched = True, num_proc = num_workers, remove_columns = ["text"])
+    tokenized_test_dataset = test_dataset.map(tokenize, batched = True, num_proc = num_workers, remove_columns = ["text"])
     
     """
     ==========================
