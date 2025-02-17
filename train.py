@@ -158,7 +158,7 @@ def main():
         print(f"[INFO] El entrenamiento se realizará con {world_size} GPUs")
     
     trainer.train()
-    model.push_to_hub("gpt-bi", organization="AuriLab")
+    model.push_to_hub("gpt-bi-erik", organization="AuriLab")
 
 if __name__ == "__main__":
     main()
