@@ -5,5 +5,5 @@ cd gpt-bi
 
 pip install -r requirements.txt
 
-python3 train.py
+torchrun --nproc_per_node=<n_gpus> train.py
 ```
