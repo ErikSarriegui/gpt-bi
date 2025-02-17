@@ -1,4 +1,4 @@
-from transformers import GPT2TokenizerFast, GPT2Config, GPT2LMHeadModel, Trainer, TrainingArguments, DataCollatorForLanguageModeling
+from transformers import GPT2TokenizerFast, GPT2Config, GPT2LMHeadModel, Trainer, TrainingArguments
 
 import huggingface_hub
 
@@ -27,7 +27,7 @@ def main():
     """        
     ## -- Model & Hyperparams
     block_size = 1024
-    batch_size = 64
+    batch_size = 8
     learning_rate = 6e-4
     weight_decay = 0.1
     max_grad_norm = 1.0
@@ -40,6 +40,7 @@ def main():
     ## -- Tokenizer
     tokenizer_id = "AuriLab/gpt-bi"
     tokenizer = GPT2TokenizerFast.from_pretrained(tokenizer_id)
+    tokenizer.pad_token = tokenizer.eos_token
     
     """
     ==========================
@@ -66,6 +67,7 @@ def main():
     def tokenize(example, tokenizer=tokenizer, block_size=block_size):
         tokenized = tokenizer(
             example["text"],
+            padding="max_length",
             truncation=True,
             max_length=block_size,
         )
@@ -76,8 +78,8 @@ def main():
     train_dataset = loadLatxa(split = "train")
     test_dataset = loadLatxa(split = "test")
     
-    tokenized_train_dataset = train_dataset.map(tokenize, batched = True, num_proc = 6)
-    tokenized_test_dataset = test_dataset.map(tokenize, batched = True, num_proc = 6)
+    tokenized_train_dataset = train_dataset.map(tokenize, batched = True, num_proc = 8)
+    tokenized_test_dataset = test_dataset.map(tokenize, batched = True, num_proc = 8)
     
     """
     ==========================
@@ -127,19 +129,11 @@ def main():
         optim = "adamw_torch"
     )
             
-            
-    data_collator = DataCollatorForLanguageModeling(
-        tokenizer = tokenizer,
-        mlm = False,
-        pad_to_multiple_of = 8
-    )
-            
     trainer = Trainer(
         model = model,
         args = training_args,
         train_dataset = tokenized_train_dataset,
         eval_dataset = tokenized_test_dataset,
-        data_collator = data_collator,
         callbacks = [PushToHubCallback()]
     )
         

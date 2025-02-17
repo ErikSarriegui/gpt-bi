@@ -1,5 +1,6 @@
 from datasets import load_dataset, concatenate_datasets
 
+"""
 SUBSETS = [
     "euscrawl-v1.1",
     "egunkaria",
@@ -8,6 +9,11 @@ SUBSETS = [
     "culturax",
     "colossal-oscar",
     "hplt-v1"
+]
+"""
+
+SUBSETS = [
+    "booktegi"
 ]
 
 def loadLatxa(split : str):
