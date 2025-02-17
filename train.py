@@ -15,7 +15,8 @@ def main():
     SET UP ENVIROMENT
     ==========================
     """
-    huggingface_hub.login(token = input("HF_TOKEN: "))
+    hf_token = input("HF_TOKEN: ")
+    huggingface_hub.login(token = hf_token)
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     torch.backends.cudnn.benchmark = True
@@ -63,16 +64,18 @@ def main():
     DATASET
     ==========================
     """
-    def tokenize(example, tokenizer = tokenizer, block_size = block_size):
+    def tokenize(example, tokenizer=tokenizer, block_size=block_size):
+        # Procesar cada texto del batch individualmente
+        textos_procesados = [texto.replace("\n", " ") for texto in example["text"]]
+        
         tokenized = tokenizer(
-            example["text"].replace("\n", " "), 
-            padding="max_length", 
-            max_length=block_size, 
+            textos_procesados,  # Usar la lista procesada
+            padding="max_length",
+            max_length=block_size,
             truncation=True
         )
         
         tokenized["labels"] = tokenized["input_ids"].copy()
-        
         return tokenized
 
     train_dataset = loadLatxa(split = "train")
