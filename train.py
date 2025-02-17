@@ -15,7 +15,7 @@ def main():
     SET UP ENVIROMENT
     ==========================
     """
-    huggingface_hub.login(token = "<your_token>")
+    huggingface_hub.login(token = "<token>")
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     torch.backends.cudnn.benchmark = True
@@ -69,7 +69,7 @@ def main():
     
     def tokenize(example, tokenizer=tokenizer, block_size=block_size):
         tokenized = tokenizer(
-            example["text"],
+            example["clean_text"],
             padding="max_length",
             max_length=block_size,
             truncation=True
@@ -103,45 +103,45 @@ def main():
     training_args = TrainingArguments(
         output_dir = "./gpt2-pretrained",
         overwrite_output_dir = True,
-            
+                
         # Parámetros de entrenamiento principales
-        max_steps = max_steps,
-        per_device_train_batch_size = batch_size / world_size,
-            
+        max_steps = int(round(max_steps)),
+        per_device_train_batch_size = int(batch_size / world_size),
+                
         # Optimizador y learning rate
         learning_rate = learning_rate,
         weight_decay = weight_decay,
         max_grad_norm = max_grad_norm,
         lr_scheduler_type = lr_scheduler_type,
         warmup_steps = warmup_steps,
-            
+                
         # Precisión y optimización
         fp16 = True, # bf16 en A100?
-            
+                
         # Checkpoints y logging
         save_strategy = "steps",
-        save_steps = max_steps / 20,
+        save_steps = int(round(max_steps / 20)),
         logging_strategy = "steps",
-        logging_steps = max_steps / 20,
+        logging_steps = int(round(max_steps / 20)),
         eval_strategy="steps",
-            
+                
         # Otros parámetros
         ddp_find_unused_parameters = ddp_find_unused_parameters,
         dataloader_num_workers = num_workers,
         report_to = "none",
-            
+                
         # Optimizaciones de memoria
         gradient_checkpointing = gradient_checkpointing,
         optim = "adamw_torch"
     )
-        
-        
+            
+            
     data_collator = DataCollatorForLanguageModeling(
         tokenizer = tokenizer,
         mlm = False,
         pad_to_multiple_of = 8
     )
-        
+            
     trainer = Trainer(
         model = model,
         args = training_args,
@@ -150,7 +150,7 @@ def main():
         data_collator = data_collator,
         callbacks = [PushToHubCallback()]
     )
-    
+        
     """
     ==========================
     TRAIN
@@ -159,7 +159,7 @@ def main():
     print(f"[INFO] Iniciando el entrenamiento en {device}")
     if device == "cuda":
         print(f"[INFO] El entrenamiento se realizará con {world_size} GPUs")
-    
+        
     trainer.train()
     model.push_to_hub("gpt-bi-erik", organization="AuriLab")
 
