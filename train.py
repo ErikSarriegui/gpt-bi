@@ -15,8 +15,7 @@ def main():
     SET UP ENVIROMENT
     ==========================
     """
-    hf_token = input("HF_TOKEN: ")
-    huggingface_hub.login(token = hf_token)
+    huggingface_hub.login(token = "<your_token>")
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
     torch.backends.cudnn.benchmark = True
@@ -64,12 +63,13 @@ def main():
     DATASET
     ==========================
     """
+    def clean_text(example):
+        example["clean_text"] = example["text"]
+        return example
+    
     def tokenize(example, tokenizer=tokenizer, block_size=block_size):
-        # Procesar cada texto del batch individualmente
-        textos_procesados = [texto.replace("\n", " ") for texto in example["text"]]
-        
         tokenized = tokenizer(
-            textos_procesados,  # Usar la lista procesada
+            example["text"],
             padding="max_length",
             max_length=block_size,
             truncation=True
@@ -81,8 +81,11 @@ def main():
     train_dataset = loadLatxa(split = "train")
     test_dataset = loadLatxa(split = "test")
 
-    tokenized_train_dataset = train_dataset.map(tokenize, batched = True, num_proc = num_workers, remove_columns = ["text"])
-    tokenized_test_dataset = test_dataset.map(tokenize, batched = True, num_proc = num_workers, remove_columns = ["text"])
+    clean_train_dataset = train_dataset.map(clean_text, batched = True, num_proc = num_workers, remove_columns = ["text"])
+    clean_test_dataset = test_dataset.map(clean_text, batched = True, num_proc = num_workers, remove_columns = ["text"])
+    
+    tokenized_train_dataset = clean_train_dataset.map(tokenize, batched = True, num_proc = num_workers, remove_columns = ["clean_text"])
+    tokenized_test_dataset = clean_test_dataset.map(tokenize, batched = True, num_proc = num_workers, remove_columns = ["clean_text"])
     
     """
     ==========================
