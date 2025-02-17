@@ -66,19 +66,18 @@ def main():
     def tokenize(example, tokenizer=tokenizer, block_size=block_size):
         tokenized = tokenizer(
             example["text"],
-            padding="max_length",
+            truncation=True,
             max_length=block_size,
-            truncation=True
         )
-        
+    
         tokenized["labels"] = tokenized["input_ids"].copy()
         return tokenized
 
     train_dataset = loadLatxa(split = "train")
     test_dataset = loadLatxa(split = "test")
     
-    tokenized_train_dataset = train_dataset.map(tokenize, batched = True, num_proc = num_workers, remove_columns = ["text"])
-    tokenized_test_dataset = test_dataset.map(tokenize, batched = True, num_proc = num_workers, remove_columns = ["text"])
+    tokenized_train_dataset = train_dataset.map(tokenize, batched = True, num_proc = 6)
+    tokenized_test_dataset = test_dataset.map(tokenize, batched = True, num_proc = 6)
     
     """
     ==========================
