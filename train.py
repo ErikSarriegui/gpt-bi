@@ -48,7 +48,7 @@ def main():
     ==========================
     """
     config = GPT2Config(
-        vocab_size = tokenizer.vocab_size,
+        vocab_size = 32003,
         n_positions = block_size,
         n_ctx = block_size,
         n_embd = 768,
