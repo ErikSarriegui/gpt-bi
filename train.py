@@ -56,8 +56,11 @@ def main():
         n_head = 12,
     )
 
-    model = GPT2LMHeadModel(config)
-    model.to(device)
+    model = GPT2LMHeadModel(config).to(device)
+    try:
+        model = torch.compile(model)
+    except:
+        print("[INFO] No se ha podido compilar el modelo")
 
     """
     ==========================
