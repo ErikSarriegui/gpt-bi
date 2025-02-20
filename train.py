@@ -65,7 +65,7 @@ def train_model() -> None:
     WARMUP_STEPS = 2000
     DDP_FIND_UNUSED_PARAMETERS = False
     GRADIENT_CHECKPOINTING = False
-    NUM_WORKERS = 4
+    NUM_WORKERS = 8
 
     
     
