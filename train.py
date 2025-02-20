@@ -57,7 +57,7 @@ def train_model() -> None:
     EPOCHS = 1
     OUTPUT_DIR = "./gpt-bi-pretrained"
     BLOCK_SIZE = 1024
-    BATCH_SIZE = 2
+    BATCH_SIZE = 64
     LEARNING_RATE = 6e-4
     WEIGHT_DECAY = 0.1
     MAX_GRAD_NORM = 1.0
