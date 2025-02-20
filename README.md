@@ -26,9 +26,7 @@ Introducimos GPT-Bi, un modelo de lenguaje abierto basado en la arquitectura de 
 Aquí te guiaremos para que puedas comenzar a utilizar este modelo diseñado específicamente para el euskera. Sigue estos pasos para explorar y experimentar con la generación de texto en euskera.
 
 ### **Probar la aplicación**
-Puedes probar GPT-Bi directamente en tu navegador a través de nuestra demo en Hugging Face. Haz clic en el siguiente enlace para acceder a la interfaz y comenzar a generar texto en euskera:
-
-👉 <a href="https://huggingface.co/spaces/AuriLab/gpt-bi-demo" target = "_blank"> <img src="https://img.shields.io/badge/Accede_a_la_Demo-8A2BE2"> </a>
+Puedes probar GPT-Bi directamente en tu navegador a través de nuestra demo en Hugging Face. Haz clic en el siguiente enlace para acceder a la interfaz y comenzar a generar texto en euskera. <a href="https://huggingface.co/spaces/AuriLab/gpt-bi-demo" target = "_blank"> <img src="https://img.shields.io/badge/Accede_a_la_Demo-8A2BE2"> </a>
 
 ### **Utilizando Transformers**
 Si prefieres experimentar con el modelo en un entorno de programación, te proporcionamos un cuaderno de Google Colab listo para usar <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab">. Para utilizar el modelo puedes utilizar la librería `transformers` de Hugging Face.
