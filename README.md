@@ -17,6 +17,7 @@
       <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab">
    </a>
 </p>
+
 # **GPT-Bi: Un modelo de lenguaje basado en Transformers para Euskera**
 
 ```
