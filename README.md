@@ -10,7 +10,10 @@
    <img src="https://img.shields.io/badge/Paper-blue">
 </p>
 
+<p align="center">
+   
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ErikSarriegui/DeepWind/blob/main/deepwind_colab_inference.ipynb)
+</p>
 
 # **GPT-Bi: Un modelo de lenguaje basado en Transformers para Euskera**
 
