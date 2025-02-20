@@ -1,16 +1,38 @@
-from transformers import GPT2TokenizerFast, GPT2Config, GPT2LMHeadModel, Trainer, TrainingArguments
+"""
+==============================
+TRAIN
+==============================
+
+Erik Sarriegui Perez, AuriLab, Feb 2025
+"""
+from transformers import (
+    GPT2TokenizerFast,
+    GPT2Config,
+    GPT2LMHeadModel,
+    Trainer,
+    TrainingArguments,
+    DataCollatorForLanguageModeling
+)
 
 import huggingface_hub
 
 import torch
 import os
 
-## -- PROJECT IMPORTS
 from callback import PushToHubCallback
-from dataset import loadLatxa
+from dataset import loadFullCorpus
+from utils import split_tokenize_count
 
-def main():
+def train_model() -> None:
     """
+    Entrena un modelo GPT-2 en un dataset combinado de Latxa y Wikipedia en español.
+
+    Esta función configura y ejecuta el entrenamiento de un modelo GPT-2 para tareas
+    de lenguaje.  Utiliza el dataset combinado Latxa y Wikipedia, y emplea la librería
+    `transformers` de Hugging Face.  Además, implementa funcionalidades como el uso
+    de múltiples GPUs, compilación del modelo (si es posible), y el envío de
+    checkpoints a Hugging Face Hub.
+
     ==========================
     SET UP ENVIROMENT
     ==========================
@@ -20,115 +42,129 @@ def main():
     device = "cuda" if torch.cuda.is_available() else "cpu"
     torch.backends.cudnn.benchmark = True
     
+
+
     """
     ==========================
-    HYPERPARAMETERS
+    DEFINING THE TRAINING
     ==========================
-    """        
-    ## -- Model & Hyperparams
-    block_size = 1024
-    batch_size = 8
-    learning_rate = 6e-4
-    weight_decay = 0.1
-    max_grad_norm = 1.0
-    lr_scheduler_type = "cosine"
-    warmup_steps = 2000
-    ddp_find_unused_parameters = False
-    gradient_checkpointing = False
-    num_workers = os.cpu_count()
+    """
+    TOKENIZER_ID = "AuriLab/gpt-bi"
+    PUSH_REPO_ID = "gpt-bi-erik"
+    PUSH_ORGANIZATION = "AuriLab"
+    PUSH_STEPS = 10000
 
-    ## -- Tokenizer
-    tokenizer_id = "AuriLab/gpt-bi"
-    tokenizer = GPT2TokenizerFast.from_pretrained(tokenizer_id)
-    tokenizer.pad_token = tokenizer.eos_token
+    EPOCHS = 1
+    OUTPUT_DIR = "./gpt-bi-pretrained"
+    BLOCK_SIZE = 1024
+    BATCH_SIZE = 2
+    LEARNING_RATE = 6e-4
+    WEIGHT_DECAY = 0.1
+    MAX_GRAD_NORM = 1.0
+    LR_SCHEDULER_TYPE = "cosine"
+    WARMUP_STEPS = 2000
+    DDP_FIND_UNUSED_PARAMETERS = False
+    GRADIENT_CHECKPOINTING = False
+    NUM_WORKERS = 4
+
+    
     
     """
     ==========================
-    MODEL
+    MODEL & TOKENIZER
     ==========================
     """
+    tokenizer = GPT2TokenizerFast.from_pretrained(TOKENIZER_ID)
+
     config = GPT2Config(
-        vocab_size = 32003,
-        n_positions = block_size,
-        n_ctx = block_size,
+        vocab_size = 32003,                                             # <---- Cuidado aquí
+        n_positions = BLOCK_SIZE,
+        n_ctx = BLOCK_SIZE,
         n_embd = 768,
         n_layer = 12,
         n_head = 12,
     )
 
     model = GPT2LMHeadModel(config).to(device)
-    try:
-        model = torch.compile(model)
-    except:
-        print("[INFO] No se ha podido compilar el modelo")
+
 
     """
     ==========================
     DATASET
     ==========================
-    """   
-    def tokenize(example, tokenizer=tokenizer, block_size=block_size):
-        tokenized = tokenizer(
-            example["text"],
-            padding="max_length",
-            truncation=True,
-            max_length=block_size,
-        )
+    """
+    dataset = loadFullCorpus()
     
-        tokenized["labels"] = tokenized["input_ids"].copy()
-        return tokenized
+    tokenized_train_dataset = dataset["train"].map(
+        split_tokenize_count,
+        batched = True,
+        num_proc = NUM_WORKERS,
+        remove_columns="text",
+        fn_kwargs = {"tokenizer": tokenizer, "block_size": BLOCK_SIZE}
+    )
 
-    train_dataset = loadLatxa(split = "train")
-    test_dataset = loadLatxa(split = "test")
-    
-    tokenized_train_dataset = train_dataset.map(tokenize, batched = True, num_proc = 8)
-    tokenized_test_dataset = test_dataset.map(tokenize, batched = True, num_proc = 8)
-    
+    tokenized_test_dataset = dataset["test"].map(
+        split_tokenize_count,
+        batched = True,
+        num_proc = NUM_WORKERS,
+        remove_columns="text",
+        fn_kwargs = {"tokenizer": tokenizer, "block_size": BLOCK_SIZE}
+    )
+
+    n_train_tokens = sum(tokenized_train_dataset['n_tokens'])
+    n_test_tokens = sum(tokenized_test_dataset['n_tokens'])
+
+    tokenized_train_dataset = tokenized_train_dataset.remove_columns("n_tokens")
+    tokenized_test_dataset = tokenized_test_dataset.remove_columns("n_tokens")
+
     """
     ==========================
-    TRAINING
+    LAST CHECKS
     ==========================
     """
-    ## -- Calculate steps
-    model_n_params = sum(p.numel() for p in model.parameters())
-    ideal_n_tokens = model_n_params * 20
-    max_steps = (ideal_n_tokens // (batch_size * 1024)) * 1.07
+    dataCollator = DataCollatorForLanguageModeling(
+        tokenizer=tokenizer,
+        mlm = False
+    )
+
+    callback_push = PushToHubCallback(PUSH_REPO_ID, PUSH_ORGANIZATION, PUSH_STEPS)
 
     world_size = int(os.environ.get("WORLD_SIZE", 1))
-    assert batch_size % world_size == 0, f"Batch size {batch_size} no es divisible por el número de GPUs {world_size}"
+    assert BATCH_SIZE % world_size == 0, f"Batch size {BATCH_SIZE} no es divisible por el número de GPUs {world_size}"
 
+
+
+    """
+    ==========================
+    TRAINING ARGUMENTS
+    ==========================
+    """
     training_args = TrainingArguments(
-        output_dir = "./gpt2-pretrained",
+        output_dir = OUTPUT_DIR,
         overwrite_output_dir = True,
+        remove_unused_columns=False,
                 
-        # Parámetros de entrenamiento principales
-        max_steps = int(round(max_steps)),
-        per_device_train_batch_size = int(batch_size / world_size),
+        num_train_epochs = EPOCHS,
+        per_device_train_batch_size = int(BATCH_SIZE / world_size),
                 
-        # Optimizador y learning rate
-        learning_rate = learning_rate,
-        weight_decay = weight_decay,
-        max_grad_norm = max_grad_norm,
-        lr_scheduler_type = lr_scheduler_type,
-        warmup_steps = warmup_steps,
+        learning_rate = LEARNING_RATE,
+        weight_decay = WEIGHT_DECAY,
+        max_grad_norm = MAX_GRAD_NORM,
+        lr_scheduler_type = LR_SCHEDULER_TYPE,
+        warmup_steps = WARMUP_STEPS,
                 
-        # Precisión y optimización
         fp16 = True, # bf16 en A100?
                 
-        # Checkpoints y logging
         save_strategy = "steps",
-        save_steps = int(round(max_steps / 20)),
+        save_steps = 10000,
         logging_strategy = "steps",
-        logging_steps = int(round(max_steps / 20)),
+        logging_steps = 5000,
         eval_strategy="steps",
                 
-        # Otros parámetros
-        ddp_find_unused_parameters = ddp_find_unused_parameters,
-        dataloader_num_workers = num_workers,
+        ddp_find_unused_parameters = DDP_FIND_UNUSED_PARAMETERS,
         report_to = "none",
                 
-        # Optimizaciones de memoria
-        gradient_checkpointing = gradient_checkpointing,
+        gradient_checkpointing = GRADIENT_CHECKPOINTING,
         optim = "adamw_torch"
     )
             
@@ -137,20 +173,40 @@ def main():
         args = training_args,
         train_dataset = tokenized_train_dataset,
         eval_dataset = tokenized_test_dataset,
-        callbacks = [PushToHubCallback()]
+        data_collator = dataCollator,
+        callbacks = [callback_push]
     )
-        
+    
+
+
+    """
+    ==========================
+    PRE-TRAIN LOGS
+    ==========================
+    """
+    print(f"[INFO] Dataset cargado y tokenizado, {round(n_train_tokens/1_000_000, 2)}M tokens en entrenamiento y {round(n_test_tokens/1_000_000)}M tokens en prueba")
+    print(f"[INFO] Iniciando el entrenamiento en {device}")
+
+    if device == "cuda":
+        print(f"[INFO] El entrenamiento se realizará con {world_size} GPUs")
+    
+    else:
+        print("[INFO] El entrenamiento se realizará en CPU, utiliza GPU (CUDA) para acelerar el proceso, CUDA goes BRRRRRRR")
+
     """
     ==========================
     TRAIN
     ==========================
-    """
-    print(f"[INFO] Iniciando el entrenamiento en {device}")
-    if device == "cuda":
-        print(f"[INFO] El entrenamiento se realizará con {world_size} GPUs")
-        
+    """        
     trainer.train()
-    model.push_to_hub("gpt-bi-erik", organization="AuriLab")
+    model.push_to_hub(repo_id = PUSH_REPO_ID, organization = PUSH_ORGANIZATION)
+
+
 
 if __name__ == "__main__":
-    main()
+    """
+    ==========================
+    LAUNCH TRAINING
+    ==========================
+    """
+    train_model()
