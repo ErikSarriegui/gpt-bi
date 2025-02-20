@@ -8,7 +8,7 @@ Erik Sarriegui Perez, AuriLab, Feb 2025
 from datasets import load_dataset, DatasetDict, concatenate_datasets
 
 LATXA_DATASET_ID = "HiTZ/latxa-corpus-v1.1"
-LATXA_SUBSETS = ["booktegi"]# ["euscrawl-v1.1", "egunkaria", "booktegi", "wikipedia", "culturax", "colossal-oscar", "hplt-v1"]
+LATXA_SUBSETS = ["euscrawl-v1.1", "egunkaria", "booktegi", "wikipedia", "culturax", "colossal-oscar", "hplt-v1"]
 
 WIKIPEDIA_DATASET_ID = "wikimedia/wikipedia"
 WIKIPEDIA_SUBSET = "20231101.es"
