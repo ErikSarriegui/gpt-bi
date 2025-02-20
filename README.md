@@ -1,4 +1,6 @@
-![gpt-bi-logo](images/GPT-Bi.jpg)
+<p align="center">
+   <img src="images/gpt-bi-logo.jpg">
+</p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/license-MIT-green">
