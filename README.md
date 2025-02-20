@@ -1,4 +1,4 @@
-![gpt-bi-logo](images/gpt-bi-logo.jpg)
+![gpt-bi-logo](images/GPT-Bi.jpg.jpg)
 
 # **GPT-Bi: Un modelo de lenguaje basado en Transformers para Euskera**
 
