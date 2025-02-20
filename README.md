@@ -74,17 +74,6 @@ A continuación, se detallan las fuentes de datos incluidas en [`HiTZ/latxa-corp
 | **Colossal OSCAR** | Porción en euskera de varias versiones del corpus [Colossal OSCAR](https://huggingface.co/datasets/oscar-corpus/colossal-oscar-1.0). |
 | **HPLT v1** | Porción en euskera del corpus HPLT v1 (Aulamo et al., 2023). |
 
-Además, la distribución de documentos en los conjuntos de entrenamiento, validación y prueba es la siguiente:
-| Fuente             | Train       | Valid   | Test    |
-|-------------------|------------|---------|---------|
-| **CulturaX**     | 1,283,429  | 13,096  | 13,098  |
-| **EusCrawl v1.1** | 1,758,084  | 17,861  | 17,736  |
-| **HPLT v1**       | 367,238    | 3,797   | 3,699   |
-| **Colossal OSCAR**| 233,753    | 2,483   | 2,276   |
-| **Wikipedia**     | 400,902    | 4,063   | 4,092   |
-| **Egunkaria**     | 172,876    | 1,766   | 1,764   |
-| **Booktegi**      | 161        | 4       | 1       |
-
 Para más detalles sobre las licencias y características de cada conjunto de datos, se recomienda consultar las referencias correspondientes en la publicación original del corpus [`HiTZ/latxa-corpus-v1.1`](https://huggingface.co/datasets/HiTZ/latxa-corpus-v1.1).
 
 ### Corpus en Castellano
