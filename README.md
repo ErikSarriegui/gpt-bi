@@ -1,3 +1,7 @@
+![gpt-bi-logo](images/gpt-bi-logo.png)
+
+# **GPT-Bi: Un modelo de lenguaje basado en Transformers para Euskera**
+
 ```
 git clone https://github.com/ErikSarriegui/gpt-bi
 
