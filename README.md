@@ -18,7 +18,7 @@
    </a>
 </p>
 
-# **GPT-Bi: Un modelo de lenguaje basado en Transformers en Euskera**
+# **GPT-Bi: Un modelo de lenguaje basado en Transformers para Euskera**
 
 Introducimos GPT-Bi, un modelo de lenguaje abierto basado en la arquitectura de GPT-2 diseñado para experimentar con la generación de texto en euskera. Este proyecto tiene como objetivo principal avanzar en el campo del procesamiento del lenguaje natural (PLN) para lenguas minoritarias, como el euskera, que históricamente han tenido menos recursos y modelos de lenguaje disponibles en comparación con idiomas mayoritarios como el inglés o el español. El euskera es una lengua única, no indoeuropea, con una estructura gramatical y sintáctica compleja. A pesar de su riqueza cultural e histórica, los recursos digitales y herramientas de PLN para el euskera son limitados. Nuestra misión es reducir la brecha tecnológica y empoderar a individuos y organizaciones proporcionando un modelo de lenguaje ligero, robusto y accesible que pueda ser utilizado sin restricciones, animamos a la comunidad a contribuir con datos, entrenamiento y mejoras del modelo.
 
