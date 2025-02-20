@@ -6,7 +6,7 @@
    <img src="https://img.shields.io/badge/license-MIT-green">
    
    <a href="https://huggingface.co/AuriLab/gpt-bi" target="_blank">
-      <img src="https://img.shields.io/badge/HuggingFace-%F0%9F%A4%97-orange">
+      <img src="https://img.shields.io/badge/HuggingFace-%F0%9F%A4%97-orange" />
    </a>
    
    <img src="https://img.shields.io/badge/Pretrained_Models-green">
