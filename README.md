@@ -1,5 +1,5 @@
 <p align="center" sty>
-   <img src="images/gpt-bi-logo.jpg" width="200">
+   <img src="images/gpt-bi-logo.jpg" width="600">
 </p>
 
 <p align="center">
