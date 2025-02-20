@@ -8,7 +8,7 @@
    <img src="https://img.shields.io/badge/Pretrained_Models-green">
    <img src="https://img.shields.io/badge/Blog%20Post-yellow">
    <img src="https://img.shields.io/badge/Paper-blue">
-   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab">   
+   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" href="https://www.google.com">   
 </p>
 # **GPT-Bi: Un modelo de lenguaje basado en Transformers para Euskera**
 
