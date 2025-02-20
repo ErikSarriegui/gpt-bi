@@ -4,7 +4,11 @@
 
 <p align="center">
    <img src="https://img.shields.io/badge/license-MIT-green">
-   <img src="https://img.shields.io/badge/HuggingFace-%F0%9F%A4%97-orange">
+   
+   <a href="https://huggingface.co/AuriLab/gpt-bi">
+      <img src="https://img.shields.io/badge/HuggingFace-%F0%9F%A4%97-orange">
+   </a>
+   
    <img src="https://img.shields.io/badge/Pretrained_Models-green">
    <img src="https://img.shields.io/badge/Blog%20Post-yellow">
    <img src="https://img.shields.io/badge/Paper-blue">
