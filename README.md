@@ -13,7 +13,7 @@
    <!-- <img src="https://img.shields.io/badge/Blog%20Post-yellow"> SE PUEDE HACER UN POST EN MEDIUM -->
    <!-- <img src="https://img.shields.io/badge/Paper-blue"> Cuando haya un reporte técnico -->
 
-   <a href="https://colab.research.google.com/github/tu_usuario/tu_repositorio/blob/main/tu_script.ipynb" target="_blank">
+   <a href="https://colab.research.google.com/github/ErikSarriegui/gpt-bi/blob/main/quickstart.ipynb" target="_blank">
       <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab">
    </a>
 </p>
