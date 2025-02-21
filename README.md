@@ -80,9 +80,9 @@ Para más detalles sobre las licencias y características de cada conjunto de da
 En cuanto al corpus en castellano, se han extraido los ~300M de tokens en castellano necesarios para llegar al óptimo de tokens del dump de Wikipedia realizado por Wikimedia [`wikimedia/wikipedia`](https://huggingface.co/datasets/wikimedia/wikipedia).
 
 ## **Entrenamiento**
-El entrenamiento de GPT-Bi se ha llevado a cabo utilizando la librería transformers de Hugging Face, una herramienta ampliamente reconocida en el campo del procesamiento del lenguaje natural por su flexibilidad y eficiencia. Esta elección ha permitido aprovechar las mejores prácticas en el entrenamiento de modelos basados en transformers, asegurando un equilibrio entre rendimiento y, sobre todo, accesibilidad. El uso de esta librería ha facilitado la implementación de técnicas avanzadas de entrenamiento, garantizando que el modelo sea robusto y fácil de utilizar por la comunidad. En cuanto al proceso de entrenamiento, se ha realizado en 6 GPUs Tesla V100, con un tiempo total de aproximadamente 12 horas. Se utilizó un batch size de 48, lo que permitió manejar de manera eficiente el volumen de datos disponible. El entrenamiento se completó en un único epoch, asegurando que el modelo iterara sobre todos los datos una vez. Este enfoque fue diseñado para optimizar el uso de los recursos computacionales sin comprometer la calidad del modelo final.
+El entrenamiento de GPT-Bi se ha llevado a cabo utilizando la librería transformers de Hugging Face, una herramienta ampliamente reconocida en el campo del procesamiento del lenguaje natural por su flexibilidad y eficiencia. Esta elección ha permitido aprovechar las mejores prácticas en el entrenamiento de modelos basados en transformers, asegurando un equilibrio entre rendimiento y, sobre todo, accesibilidad. El uso de esta librería ha facilitado la implementación de técnicas avanzadas de entrenamiento, garantizando que el modelo sea robusto y fácil de utilizar por la comunidad. En cuanto al proceso de entrenamiento, se ha realizado en ####, con un tiempo total de aproximadamente ## horas. Se utilizó un batch size de 48, lo que permitió manejar de manera eficiente el volumen de datos disponible. El entrenamiento se completó en un único epoch, asegurando que el modelo iterara sobre todos los datos una vez. Este enfoque fue diseñado para optimizar el uso de los recursos computacionales sin comprometer la calidad del modelo final.
 
-El entrenamiento de modelos de lenguaje, como GPT-Bi, a menudo requiere el uso de múltiples GPUs para manejar eficientemente el volumen de datos y la complejidad del modelo. En este caso, el entrenamiento se realizó en 6 GPUs Tesla V100, lo que permitió distribuir la carga de trabajo y acelerar el proceso. Para facilitar este entrenamiento distribuido, se utilizó la librería `torchrun`, que es parte de PyTorch y permite ejecutar scripts de entrenamiento en múltiples GPUs de manera sencilla.
+El entrenamiento de modelos de lenguaje, como GPT-Bi, a menudo requiere el uso de múltiples GPUs para manejar eficientemente el volumen de datos y la complejidad del modelo. En este caso, el entrenamiento se realizó en ####,, lo que permitió distribuir la carga de trabajo y acelerar el proceso. Para facilitar este entrenamiento distribuido, se utilizó la librería `torchrun`, que es parte de PyTorch y permite ejecutar scripts de entrenamiento en múltiples GPUs de manera sencilla.
 
 El siguiente código proporcionado es un ejemplo de cómo iniciar el entrenamiento de manera distribuida utilizando torchrun. Sin embargo, es importante tener en cuenta que el script train.py debe ser configurado adecuadamente para incluir detalles específicos como el token de Hugging Face y el repositorio donde se desea subir el modelo una vez completado el entrenamiento.
 
@@ -104,9 +104,6 @@ torchrun --nproc_per_node=<n_gpus> train.py
 | **Mejorar la documentación**          | Ampliar y detallar la documentación del proyecto, incluyendo guías de uso, ejemplos y mejores prácticas para facilitar la adopción por parte de la comunidad. |
 
 ## **Métricas**
-[PROXIMAMENTE]
-
-## **Agradecimientos**
 [PROXIMAMENTE]
 
 ## **Apoya el proyecto**
