@@ -66,7 +66,8 @@ def train_model() -> None:
     DDP_FIND_UNUSED_PARAMETERS = False
     GRADIENT_CHECKPOINTING = False
     NUM_WORKERS = 8
-
+    EVAL_SAVE_LOGGING_STRATEGY = "steps"
+    REPORT = "none"
     
     
     """
@@ -77,7 +78,7 @@ def train_model() -> None:
     tokenizer = GPT2TokenizerFast.from_pretrained(TOKENIZER_ID)
 
     config = GPT2Config(
-        vocab_size = 32003,                                             # <---- Cuidado aquí
+        vocab_size = 32003,
         n_positions = BLOCK_SIZE,
         n_ctx = BLOCK_SIZE,
         n_embd = 768,
@@ -153,19 +154,18 @@ def train_model() -> None:
         lr_scheduler_type = LR_SCHEDULER_TYPE,
         warmup_steps = WARMUP_STEPS,
                 
-        fp16 = True, # bf16 en A100?
+        fp16 = True,
                 
-        save_strategy = "steps",
-        save_steps = 10000,
-        logging_strategy = "steps",
-        logging_steps = 5000,
-        eval_strategy="steps",
+        save_strategy = EVAL_SAVE_LOGGING_STRATEGY,
+        save_steps = PUSH_STEPS,
+        logging_strategy = EVAL_SAVE_LOGGING_STRATEGY,
+        logging_steps = PUSH_STEPS,
+        eval_strategy = EVAL_SAVE_LOGGING_STRATEGY,
                 
         ddp_find_unused_parameters = DDP_FIND_UNUSED_PARAMETERS,
-        report_to = "none",
+        report_to = REPORT,
                 
-        gradient_checkpointing = GRADIENT_CHECKPOINTING,
-        optim = "adamw_torch"
+        gradient_checkpointing = GRADIENT_CHECKPOINTING
     )
             
     trainer = Trainer(
